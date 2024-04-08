@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.component.Table;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,7 +16,9 @@ public class Main {
 //        jFrame.pack();// le conteneur qui s'adapte à la taill du composant (attention l'ordre est imposant)
 //        jFrame.add(new BorderLayoutDemo());
 //        jFrame.add(new FlowLayoutDemo().getJPanel());
-        jFrame.add(new GridBagLayoutDemo().getJPanel());
+//        jFrame.add(new GridBagLayoutDemo().getJPanel());
+//        jFrame.add(new BoxLayoutDemo().getPanel());
+        jFrame.add(new Table().getScrollPane());
         jFrame.setVisible(true);
 
 

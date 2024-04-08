@@ -15,7 +15,6 @@ public class Calculator implements ActionListener {
 
     public Calculator() {
         JFrame frame = new JFrame("Calculator");
-        frame.setPreferredSize(new Dimension(400, 600));
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -26,6 +25,7 @@ public class Calculator implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
         gbc.weighty = 1;
+        // même poids dans le dimensionnement (pour qu'ils aient la même taille).
 
         JButton b1 = createButton("1", Color.LIGHT_GRAY);
         JButton b2 = createButton("2", Color.LIGHT_GRAY);
@@ -43,6 +43,7 @@ public class Calculator implements ActionListener {
         JButton minusPlus = createButton("+/-", Color.LIGHT_GRAY);
         JButton percent = createButton("%", Color.LIGHT_GRAY);
 
+        // x pour la ligne et y pour les colonnes
         addButtonToPanel(buttonPanel, clear, gbc, 0, 0);
         addButtonToPanel(buttonPanel, minusPlus, gbc, 1, 0);
         addButtonToPanel(buttonPanel, percent, gbc, 2, 0);
@@ -55,14 +56,16 @@ public class Calculator implements ActionListener {
         addButtonToPanel(buttonPanel, b1, gbc, 0, 3);
         addButtonToPanel(buttonPanel, b2, gbc, 1, 3);
         addButtonToPanel(buttonPanel, b3, gbc, 2, 3);
-        gbc.gridwidth = 2; // Span two columns
+        gbc.gridwidth = 2;
         addButtonToPanel(buttonPanel, b0, gbc, 0, 4);
-        gbc.gridwidth = 1; // Reset gridwidth
+        // gridwidth modifié à 2 pour que le bouton "0" occupe 2 colonnes dans la grille,
+        gbc.gridwidth = 1;
         addButtonToPanel(buttonPanel, comma, gbc, 2, 4);
+        // puis réinitialiser à 1 pour que les autres boutons occupent une seule colonne
 
         JButton plus = createButton("+", Color.ORANGE);
         JButton minus = createButton("-", Color.ORANGE);
-        JButton multiply = createButton("*", Color.ORANGE);
+        JButton multiply = createButton("x", Color.ORANGE);
         JButton divide = createButton("/", Color.ORANGE);
         JButton equal = createButton("=", Color.ORANGE);
 
@@ -75,11 +78,10 @@ public class Calculator implements ActionListener {
         screen = new JTextField();
         screen.setEditable(false);
         screen.setBackground(Color.BLACK);
-        screen.setPreferredSize(new Dimension(380, 170));
+        screen.setPreferredSize(new Dimension(380, 200));
         screen.setHorizontalAlignment(JTextField.RIGHT);
         screen.setForeground(Color.WHITE);
         screen.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-
 
 
         mainPanel.add(screen, BorderLayout.NORTH);
@@ -91,6 +93,8 @@ public class Calculator implements ActionListener {
         frame.setContentPane(mainPanel);
         frame.setVisible(true);
         frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
     }
 
     private JButton createButton(String label, Color color) {
@@ -111,23 +115,37 @@ public class Calculator implements ActionListener {
         panel.add(component, gbc);
     }
 
+
     @Override
     public void actionPerformed(ActionEvent evt) {
         String actionCommand = evt.getActionCommand();
 
-        if (Character.isDigit(actionCommand.charAt(0))) {
-            handleNumberInput(actionCommand.charAt(0));
-        } else if (actionCommand.equals("+") || actionCommand.equals("-") || actionCommand.equals("*")
-                || actionCommand.equals("/") || actionCommand.equals("^") || actionCommand.equals("%")) {
-            handleOperatorInput(actionCommand.charAt(0));
-        } else if (actionCommand.equals("=")) {
-            handleEqual();
-        } else if (actionCommand.equals("C")) {
-            handleClear();
-        } else if (actionCommand.equals(",")) {
-            handleComma();
+        switch (actionCommand) {
+            case "C":
+                handleClear();
+                break;
+            case "=":
+                handleEqual();
+                break;
+            case ",":
+                handleComma();
+                break;
+            case "+":
+            case "-":
+            case "x":
+            case "/":
+            case "^":
+            case "%":
+                handleOperatorInput(actionCommand.charAt(0));
+                break;
+            default:
+                if (Character.isDigit(actionCommand.charAt(0))) {
+                    handleNumberInput(actionCommand.charAt(0));
+                }
+                break;
         }
     }
+
 
     private void handleComma() {
         if (!displayValue.contains(".")) {
@@ -135,7 +153,6 @@ public class Calculator implements ActionListener {
             screen.setText(displayValue);
         }
     }
-
 
 
     private void handleNumberInput(char num) {
@@ -164,7 +181,7 @@ public class Calculator implements ActionListener {
             case '-':
                 result = firstValue - secondValue;
                 break;
-            case '*':
+            case 'x':
                 result = firstValue * secondValue;
                 break;
             case '/':
