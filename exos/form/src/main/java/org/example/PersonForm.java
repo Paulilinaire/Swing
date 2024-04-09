@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class PersonForm extends JFrame {
 
-    private JLabel labTitle, labName, labEmail, labGender;
+    private JLabel labTitle, labName, labEmail, labGender, labTableTitle;
     private JTextField jtfName, jtfEmail;
     private JRadioButton radioButtonWoman, radioButtonMan, radioButtonNonBinary;
     private JButton addButton, detailsButton;
@@ -27,8 +27,12 @@ public class PersonForm extends JFrame {
         // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Panel for input fields and buttons
+        // Panel for input fields
         JPanel inputPanel = new JPanel(new GridBagLayout());
+
+        labTitle = new JLabel("Registration Form");
+        labTitle.setFont(new Font("Calibri Light", Font.BOLD, 18));
+        inputPanel.add(labTitle);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -37,9 +41,7 @@ public class PersonForm extends JFrame {
         gbc.insets = new Insets(5, 10, 5, 10); // Padding
 
         labTitle = new JLabel("Registration Form");
-        labTitle.setFont(new Font("Calibri Light", Font.BOLD, 20));
-        labTitle.setHorizontalAlignment(SwingConstants.LEFT);
-        inputPanel.add(labTitle, gbc);
+        labTitle.setFont(new Font("Calibri Light", Font.BOLD, 18));
 
         gbc.gridy++;
         labName = new JLabel("Name");
@@ -99,6 +101,11 @@ public class PersonForm extends JFrame {
 
         // Panel for user table
         JPanel userTablePanel = new JPanel(new BorderLayout());
+
+        labTableTitle = new JLabel("Data table");
+        labTableTitle.setFont(new Font("Calibri Light", Font.BOLD, 18));
+        userTablePanel.add(labTableTitle, BorderLayout.NORTH);
+
         String[] columnNames = {"Name", "Email", "Gender"};
         tableModel = new DefaultTableModel(columnNames, 0);
         userTable = new JTable(tableModel);
@@ -134,7 +141,6 @@ public class PersonForm extends JFrame {
                     tableModel.addRow(new Object[]{name, email, gender});
                     jtfName.setText("");
                     jtfEmail.setText("");
-                    // Clear the selection of radio buttons after adding the user
                     genderGroup.clearSelection();
                 } else {
                     JOptionPane.showMessageDialog(PersonForm.this, "Please enter name, email, and select gender.");
