@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.TextAttribute;
+import java.text.AttributedString;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,27 +106,23 @@ public class TodoList extends JFrame {
             }
         });
 
-        // Action listener for Complete button
         completeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedTask = taskList.getSelectedValue();
+                int selectedIndex = taskList.getSelectedIndex();
 
-                if (selectedTask != null) {
-                    int selectedIndex = taskList.getSelectedIndex();
+                if (selectedIndex != -1) {
+                    String selectedTask = listModel.getElementAt(selectedIndex);
 
-                    Font font = taskList.getFont();
-                    Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
-                    attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
-                    Font strikethroughFont = new Font(attributes);
-                    taskList.setFont(strikethroughFont);
+                    String htmlText = "<html><strike>" + selectedTask + "</strike></html>";
 
-                    listModel.setElementAt(selectedTask, selectedIndex);
+                    listModel.setElementAt(htmlText, selectedIndex);
                 } else {
                     JOptionPane.showMessageDialog(TodoList.this, "Please select a task.");
                 }
             }
         });
+
 
     }
 }
