@@ -1,6 +1,7 @@
 package org.example;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class PersonForm extends JFrame {
 
-    private JLabel labTitle, labName, labEmail, labGender, labTableTitle;
+    private JLabel labName, labEmail, labGender;
     private JTextField jtfName, jtfEmail;
     private JRadioButton radioButtonWoman, radioButtonMan, radioButtonNonBinary;
     private JButton addButton, detailsButton;
@@ -30,18 +31,14 @@ public class PersonForm extends JFrame {
         // Panel for input fields
         JPanel inputPanel = new JPanel(new GridBagLayout());
 
-        labTitle = new JLabel("Registration Form");
-        labTitle.setFont(new Font("Calibri Light", Font.BOLD, 18));
-        inputPanel.add(labTitle);
+        TitledBorder tableBorder = BorderFactory.createTitledBorder("Registration Form"); // Create border with a title
+        inputPanel.setBorder(tableBorder);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 10, 5, 10); // Padding
-
-        labTitle = new JLabel("Registration Form");
-        labTitle.setFont(new Font("Calibri Light", Font.BOLD, 18));
 
         gbc.gridy++;
         labName = new JLabel("Name");
@@ -91,7 +88,7 @@ public class PersonForm extends JFrame {
 
         gbc.gridy++;
         gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Fill horizontally
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         addButton = new JButton("ADD");
         addButton.setFont(new Font("Calibri", Font.PLAIN, 14));
         addButton.setBackground(Color.white);
@@ -102,9 +99,8 @@ public class PersonForm extends JFrame {
         // Panel for user table
         JPanel userTablePanel = new JPanel(new BorderLayout());
 
-        labTableTitle = new JLabel("Data table");
-        labTableTitle.setFont(new Font("Calibri Light", Font.BOLD, 18));
-        userTablePanel.add(labTableTitle, BorderLayout.NORTH);
+        tableBorder = BorderFactory.createTitledBorder("Data Table"); // Create border with a title
+        userTablePanel.setBorder(tableBorder);
 
         String[] columnNames = {"Name", "Email", "Gender"};
         tableModel = new DefaultTableModel(columnNames, 0);
