@@ -8,8 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class ContactDao {
 
@@ -122,7 +121,7 @@ public class ContactDao {
             ResultSet resultSet=ps.executeQuery();
             Contact contact=null;
             if(resultSet.next()){
-                contact=new Contact();
+                contact = new Contact();
                 contact.setId(resultSet.getInt("id"));
                 contact.setName(resultSet.getString("name"));
                 contact.setNumber(resultSet.getString("number"));

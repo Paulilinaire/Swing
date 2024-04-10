@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 public class DeleteDialog extends JDialog {
 
     private JPanel inputPanel;
-    private JLabel labId, labName, labNumber;
-    private JTextField jtfId, jtfName, jtfNumber;
+    private JLabel labId;
+    private JTextField jtfId;
 
     public DeleteDialog(){
         inputPanel = new JPanel();

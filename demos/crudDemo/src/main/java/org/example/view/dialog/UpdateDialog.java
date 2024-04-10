@@ -24,7 +24,19 @@ public class UpdateDialog extends JDialog{
             @Override
             public void actionPerformed(ActionEvent e) {
                 ContactDao contactDao = new ContactDao();
-                int id = Integer.parseInt(jtfId.getText());
+                int id;
+                try {
+                    id = Integer.parseInt(jtfId.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid integer ID");
+                    return;
+                }
+
+                if (jtfId.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please enter an ID");
+                    return;
+                }
+
                 Contact contact = contactDao.searchContact(id);
                 if (contact != null) {
                     jtfName.setText(contact.getName());
@@ -35,10 +47,11 @@ public class UpdateDialog extends JDialog{
                     labNumber.setEnabled(true);
                     jtfId.setEnabled(false);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Record not found for given ID!!!");
+                    JOptionPane.showMessageDialog(null, "Record not found for given ID !");
                 }
             }
         });
+
 
         JButton updateButton = new JButton("UPDATE");
         updateButton.addActionListener(new ActionListener() {
@@ -51,9 +64,9 @@ public class UpdateDialog extends JDialog{
                     ContactDao contactDao = new ContactDao();
                     int count= contactDao.update(contact);
                     if(count > 0) {
-                        JOptionPane.showMessageDialog(null, "Record updated successfully!!!");
+                        JOptionPane.showMessageDialog(null, "Record updated successfully !");
                     }else{
-                        JOptionPane.showMessageDialog(null, "Record can't be updated !!!");
+                        JOptionPane.showMessageDialog(null, "Record can't be updated !");
                     }
                     dispose();
                 }
@@ -86,7 +99,7 @@ public class UpdateDialog extends JDialog{
         jtfId = new JTextField(15);
         inputPanel.add(jtfId, gbc);
 
-        gbc.gridx++;
+        gbc.gridy++;
         inputPanel.add(searchButton, gbc);
 
 
