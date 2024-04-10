@@ -45,32 +45,24 @@ public class TodoList extends JFrame {
         // Panel for buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Use FlowLayout for buttonPanel
 
-        ImageIcon icon = new ImageIcon("src/plus.jpg");
-        Image originalImage = icon.getImage();
-        // Resize the image
-        Image scaledImage = originalImage.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        // Create a new ImageIcon with the scaled image
-        Icon scaledIcon = new ImageIcon(scaledImage);
-        // Create the JButton with the scaled icon
-        addButton = new JButton(scaledIcon);
+        // Initialize the buttons
+        addButton = new JButton();
         addButton.setBackground(Color.WHITE);
-        buttonPanel.add(addButton);
-
-        icon = new ImageIcon("src/trash.jpg");
-        Image originalTrash = icon.getImage();
-        Image scaledTrash = originalTrash.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        Icon scaledDelete = new ImageIcon(scaledTrash);
-        deleteButton = new JButton(scaledDelete);
+        deleteButton = new JButton();
         deleteButton.setBackground(Color.WHITE);
-        buttonPanel.add(deleteButton);
-
-        icon = new ImageIcon("src/v-icon.jpg");
-        Image originalV = icon.getImage();
-        Image scaledV = originalV.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        Icon scaledComplete = new ImageIcon(scaledV);
-        completeButton = new JButton(scaledComplete);
+        completeButton = new JButton();
         completeButton.setBackground(Color.WHITE);
+
+        // Resize icons for each button
+        resizeIcon(addButton, "src/plus.jpg", 25, 25);
+        resizeIcon(deleteButton, "src/trash.jpg", 25, 25);
+        resizeIcon(completeButton, "src/v-icon.jpg", 25, 25);
+
+        // Add buttons to the buttonPanel
+        buttonPanel.add(addButton);
+        buttonPanel.add(deleteButton);
         buttonPanel.add(completeButton);
+
 
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -106,6 +98,8 @@ public class TodoList extends JFrame {
             }
         });
 
+        // Action listener for Complete button
+
         completeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,6 +117,18 @@ public class TodoList extends JFrame {
             }
         });
 
-
     }
+
+    public void resizeIcon(JButton button, String path, int height, int width) {
+        ImageIcon icon = new ImageIcon(path); // Load the icon from the specified path
+        Image originalImage = icon.getImage();
+        // Resize the image
+        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        // Create a new ImageIcon with the scaled image
+        Icon scaledIcon = new ImageIcon(scaledImage);
+        // Set the scaled icon for the button
+        button.setIcon(scaledIcon);
+    }
+
+
 }
