@@ -5,18 +5,27 @@ import javax.swing.table.AbstractTableModel;
 public class EmployeeTableModel extends AbstractTableModel {
 
     private String[] columnNames = {"ID", "Last name", "First name", "Role", "Department"};
+
+    private Object[][] data = {
+
+    };
+
     @Override
     public int getRowCount() {
-        return 0;
+        return columnNames.length;
     }
 
     @Override
     public int getColumnCount() {
-        return 0;
+        return data.length;
+    }
+
+    public String getColumnName(int col) {
+        return columnNames[col];
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return null;
+        return data[rowIndex][columnIndex];
     }
 }
