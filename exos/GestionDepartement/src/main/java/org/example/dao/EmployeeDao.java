@@ -1,10 +1,10 @@
 package org.example.dao;
 
+import org.example.model.Department;
 import org.example.model.Employee;
 import org.example.model.Role;
 import org.example.utils.DbConnexion;
 
-import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +13,17 @@ public class EmployeeDao implements BaseDAO<Employee> {
     private Connection connection;
     private PreparedStatement ps;
     private ResultSet resultSet;
+    private DepartmentDao departmentDao = new DepartmentDao();
 
     @Override
     public int save(Employee employee) {
         try {
             connection = DbConnexion.getConnection();
-            ps = connection.prepareStatement("INSERT INTO `employee` (`lastname`, `firstname`, `role`, `departmentId`) VALUES (?, ?, ?, ?)");
+            ps = connection.prepareStatement("INSERT INTO `employee` (`lastname`, `firstname`, `role`, `department_id`) VALUES (?, ?, ?, ?)");
             ps.setString(1, employee.getLastname());
             ps.setString(2, employee.getFirstname());
             ps.setString(3, employee.getRole().toString());
-            ps.setInt(4, employee.getDepartmentId());
+            ps.setInt(4, employee.getDepartment().getId());
             return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -35,11 +36,11 @@ public class EmployeeDao implements BaseDAO<Employee> {
     public int update(Employee employee) {
         try {
             connection = DbConnexion.getConnection();
-            ps = connection.prepareStatement("UPDATE `employee` SET `lastname` = ?, `firstname` = ?, `role` = ?, `departmentId` = ? WHERE id = ?");
+            ps = connection.prepareStatement("UPDATE `employee` SET `lastname` = ?, `firstname` = ?, `role` = ?, `department_id` = ? WHERE id = ?");
             ps.setString(1, employee.getLastname());
             ps.setString(2, employee.getFirstname());
             ps.setString(3, employee.getRole().toString());
-            ps.setInt(4, employee.getDepartmentId());
+            ps.setInt(4, employee.getDepartment().getId());
             ps.setInt(5, employee.getId());
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -71,12 +72,13 @@ public class EmployeeDao implements BaseDAO<Employee> {
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
             if (resultSet.next()) {
-                return new Employee(
-                        resultSet.getInt("id"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        Role.valueOf(resultSet.getString("role")),
-                        resultSet.getInt("departmentId"));
+                int employeeId = resultSet.getInt("id");
+                String firstname = resultSet.getString("firstname");
+                String lastname = resultSet.getString("lastname");
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                int departmentId = resultSet.getInt("department_id");
+                Department department = departmentDao.get(departmentId);
+                return new Employee(employeeId, firstname, lastname, role, department);
             }
             return null;
         } catch (SQLException e) {
@@ -86,38 +88,26 @@ public class EmployeeDao implements BaseDAO<Employee> {
         }
     }
 
+
     @Override
-    public List<Employee> getAll(DefaultTableModel tableModel) {
+    public List<Employee> getAll() {
         List<Employee> employees = new ArrayList<>();
         try {
             connection = DbConnexion.getConnection();
             ps = connection.prepareStatement("SELECT * FROM `employee`");
             resultSet = ps.executeQuery();
 
-            tableModel.addColumn("ID");
-            tableModel.addColumn("Firstname");
-            tableModel.addColumn("Lastname");
-            tableModel.addColumn("Role");
-            tableModel.addColumn("Department ID");
-
             while (resultSet.next()) {
-                Employee employee = new Employee(
-                        resultSet.getInt("id"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        Role.valueOf(resultSet.getString("role")),
-                        resultSet.getInt("departmentId"));
+                int employeeId = resultSet.getInt("id");
+                String firstname = resultSet.getString("firstname");
+                String lastname = resultSet.getString("lastname");
+                Role role = Role.valueOf(resultSet.getString("role").toUpperCase());
+                int departmentId = resultSet.getInt("department_id");
+                Department department = departmentDao.get(departmentId);
+                Employee employee = new Employee(employeeId, firstname, lastname, role, department);
                 employees.add(employee);
-
-                Object[] row = {
-                        employee.getId(),
-                        employee.getFirstname(),
-                        employee.getLastname(),
-                        employee.getRole(),
-                        employee.getDepartmentId()
-                };
-                tableModel.addRow(row);
             }
+
             return employees;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -125,6 +115,8 @@ public class EmployeeDao implements BaseDAO<Employee> {
             closeResources();
         }
     }
+
+
 
     private void closeResources() {
         try {

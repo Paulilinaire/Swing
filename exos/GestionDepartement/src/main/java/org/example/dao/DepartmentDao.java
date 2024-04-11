@@ -85,32 +85,21 @@ public class DepartmentDao implements BaseDAO<Department> {
 
 
     @Override
-    public List<Department> getAll(DefaultTableModel tableModel) {
+    public List<Department> getAll() {
         List<Department> departments = new ArrayList<>();
         try {
             connection = DbConnexion.getConnection();
             ps = connection.prepareStatement("SELECT * FROM `department`");
             resultSet = ps.executeQuery();
 
-            tableModel.addColumn("ID");
-            tableModel.addColumn("Name");
-            tableModel.addColumn("Employees (number)");
-
             while (resultSet.next()) {
                 Department department = new Department(
                         resultSet.getInt("id"),
                         resultSet.getString("name"));
                 departments.add(department);
-
-                Object[] row = {
-                        department.getId(),
-                        department.getName()
-                };
-                tableModel.addRow(row);
             }
             return departments;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             closeResources();

@@ -12,5 +12,5 @@ public interface BaseDAO<T> {
     int update(T element) throws SQLException;
     int delete(int id) throws SQLException;
     T get(int id) throws SQLException;
-    List<T> getAll(DefaultTableModel tableModel) throws SQLException; // Updated signature
+    List<T> getAll() throws SQLException;
 }

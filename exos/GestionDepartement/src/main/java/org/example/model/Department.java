@@ -16,10 +16,6 @@ public class Department {
     private String name;
     private List<Employee> employees;
 
-    public int countEmployees() {
-        return employees != null ? employees.size() : 0;
-    }
-
     public Department(int id, String name) {
         this.id = id;
         this.name = name;
