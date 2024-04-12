@@ -14,7 +14,7 @@ public class Main {
 
             EmployeeUI employeeUI = new EmployeeUI();
             frame.add(employeeUI);
-            frame.setSize(1000, 650);
+            frame.setSize(1000, 700);
 
             frame.setVisible(true);
             frame.setLocationRelativeTo(null);

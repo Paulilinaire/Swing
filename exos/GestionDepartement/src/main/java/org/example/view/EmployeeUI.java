@@ -1,9 +1,7 @@
 package org.example.view;
 
-import org.example.controller.EmployeeController;
 import org.example.dao.EmployeeDao;
-import org.example.model.Employee;
-import org.example.model.Role;
+
 import org.example.utils.EmployeeTableModel;
 import org.example.view.dialog.AddDialog;
 import org.example.view.dialog.DeleteDialog;
@@ -11,16 +9,15 @@ import org.example.view.dialog.EditDialog;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.ObjectInputStream;
-import java.util.List;
+
 
 
 public class EmployeeUI extends JPanel {
 
     public EmployeeUI() {
         super(new BorderLayout());
-        EmployeeController employeeController = new EmployeeController(new EmployeeDao());
-        JTable employeeTable = new JTable(new EmployeeTableModel(employeeController.getAllEmployees()));
+        EmployeeDao employeeDao = new EmployeeDao();
+        JTable employeeTable = new JTable(new EmployeeTableModel(employeeDao.getAll()));
         employeeTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
 
         JScrollPane scrollPane = new JScrollPane(employeeTable);
